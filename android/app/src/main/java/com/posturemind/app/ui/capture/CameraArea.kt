@@ -74,19 +74,27 @@ fun CameraArea(
     val imageCaptureRef = remember { mutableStateOf<ImageCapture?>(null) }
     val isProcessing = remember { mutableStateOf(false) }
 
-    val poseDetector = remember { PoseDetector(context) { result ->
-        val points = poseDetector.toAnalyzerPoints(result)
-        poseLandmarks = points
-        onPoseDetected(points)
-        statusMessage = when {
-            points.isEmpty() -> "🔍 寻找人体…"
-            isFullBodyVisible(points) -> "✓ 全身入镜，可以拍照"
-            else -> "⚠️ 请确保头顶到脚底都在画面内"
-        }
-    } }
+    val poseDetector = remember { PoseDetector(context) }
 
     LaunchedEffect(Unit) {
         poseDetector.setup()
+    }
+
+    // 主动轮询：每 200ms 读取一次最近的关键点结果
+    LaunchedEffect(poseDetector) {
+        while (true) {
+            val points = poseDetector.toAnalyzerPoints()
+            if (points != poseLandmarks) {
+                poseLandmarks = points
+                onPoseDetected(points)
+                statusMessage = when {
+                    points.isEmpty() -> "🔍 寻找人体…"
+                    isFullBodyVisible(points) -> "✓ 全身入镜，可以拍照"
+                    else -> "⚠️ 请确保头顶到脚底都在画面内"
+                }
+            }
+            kotlinx.coroutines.delay(200)
+        }
     }
 
     DisposableEffect(Unit) {
@@ -173,13 +181,9 @@ fun CameraArea(
                                     }
                                     // 运行 MediaPipe
                                     poseDetector.detect(bitmap)
-                                    val points = poseDetector.toAnalyzerPoints(
-                                        // 拿到上一步的 result 需要重构 poseDetector 的回调
-                                        null
-                                    )
-                                    // 简化：从最后的状态拿 landmarks
-                                    if (poseLandmarks.isNotEmpty() && isFullBodyVisible(poseLandmarks)) {
-                                        onCapture(bitmap, poseLandmarks)
+                                    val points = poseDetector.toAnalyzerPoints()
+                                    if (points.isNotEmpty() && isFullBodyVisible(points)) {
+                                        onCapture(bitmap, points)
                                         statusMessage = "✓ ${currentView.displayName}已拍摄"
                                     } else {
                                         statusMessage = "⚠️ 未检测到完整人体"
@@ -223,7 +227,7 @@ private fun startCamera(
         try {
             val cameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build().also {
-                it.surfaceProvider = previewView.surfaceProvider
+                it.setSurfaceProvider(previewView.surfaceProvider)
             }
 
             imageCapture = ImageCapture.Builder()

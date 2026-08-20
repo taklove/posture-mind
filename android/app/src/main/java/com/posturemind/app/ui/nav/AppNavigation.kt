@@ -1,6 +1,7 @@
 package com.posturemind.app.ui.nav
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
@@ -135,7 +136,7 @@ private fun BottomNavBar(
 }
 
 @Composable
-private fun androidx.compose.material3.RowScope.BottomNavItem(
+private fun RowScope.BottomNavItem(
     currentRoute: String,
     route: String,
     label: String,

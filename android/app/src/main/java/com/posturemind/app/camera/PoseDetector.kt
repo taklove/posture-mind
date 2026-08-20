@@ -19,11 +19,16 @@ import com.posturemind.app.data.PostureAnalyzer
  * 3. 关闭资源
  */
 class PoseDetector(
-    private val context: Context,
-    private val onResult: (PoseLandmarkerResult?) -> Unit
+    private val context: Context
 ) {
     private var poseLandmarker: PoseLandmarker? = null
     private val analyzer = PostureAnalyzer()
+
+    /**
+     * 最近一次检测结果（由 detect() 写入）
+     */
+    var lastResult: PoseLandmarkerResult? = null
+        private set
 
     /**
      * 初始化 MediaPipe Pose 模型
@@ -65,13 +70,14 @@ class PoseDetector(
             Log.e(TAG, "Detection failed", e)
             null
         }
-        onResult(result)
+        lastResult = result
     }
 
     /**
-     * 转换 MediaPipe 关键点到 PostureAnalyzer.Point
+     * 把最近一次 detect() 的结果转成 PostureAnalyzer.Point
      */
-    fun toAnalyzerPoints(result: PoseLandmarkerResult?): List<PostureAnalyzer.Point> {
+    fun toAnalyzerPoints(): List<PostureAnalyzer.Point> {
+        val result = lastResult
         if (result == null || result.landmarks().isEmpty()) return emptyList()
         val lm = result.landmarks()[0]
         return lm.map {

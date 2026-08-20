@@ -4,7 +4,6 @@ import android.app.Application
 import android.graphics.Bitmap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.posturemind.app.camera.PoseDetector
 import com.posturemind.app.data.AssessmentResult
 import com.posturemind.app.data.CaptureView
 import com.posturemind.app.data.HistoryStore
@@ -65,22 +64,6 @@ class PostureViewModel(app: Application) : AndroidViewModel(app) {
 
     val completedToday: StateFlow<Map<String, Long>> = historyStore.completedToday
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
-
-    // ============================================================
-    // Pose Detector（懒初始化）
-    // ============================================================
-    private var poseDetector: PoseDetector? = null
-
-    fun getOrCreatePoseDetector(onResult: (List<PostureAnalyzer.Point>?) -> Unit): PoseDetector {
-        if (poseDetector == null) {
-            poseDetector = PoseDetector(getApplication()) { result ->
-                val points = poseDetector?.toAnalyzerPoints(result)
-                onResult(points)
-            }
-            poseDetector?.setup()
-        }
-        return poseDetector!!
-    }
 
     // ============================================================
     // 评估流程
@@ -168,10 +151,5 @@ class PostureViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             historyStore.toggleExerciseDone(id)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        poseDetector?.close()
     }
 }
