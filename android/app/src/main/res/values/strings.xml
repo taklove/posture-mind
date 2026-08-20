@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">正形</string>
+    <string name="app_subtitle">PostureMind</string>
+    <string name="app_tagline">找到该有力却无力的肌肉</string>
+
+    <!-- 通用 -->
+    <string name="back">返回</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="loading">加载中…</string>
+
+    <!-- 导航 -->
+    <string name="nav_home">首页</string>
+    <string name="nav_capture">评估</string>
+    <string name="nav_training">训练</string>
+    <string name="nav_progress">记录</string>
+
+    <!-- 首页 -->
+    <string name="home_hero_title">找到那块\n该有力却无力的\n肌肉</string>
+    <string name="home_hero_subtitle">体态问题，不是\"哪里太紧\"\n而是哪里该发力却没发力</string>
+    <string name="home_start">开始评估</string>
+    <string name="home_about">了解理念</string>
+
+    <!-- 拍照 -->
+    <string name="capture_title">体态拍摄</string>
+    <string name="capture_instruction">请按顺序拍摄 3 个角度</string>
+    <string name="view_front">正面</string>
+    <string name="view_side">侧面</string>
+    <string name="view_back">背面</string>
+    <string name="capture_btn">拍摄</string>
+    <string name="upload_btn">上传照片</string>
+    <string name="analyze_btn">分析</string>
+    <string name="capture_ready">准备就绪</string>
+    <string name="capture_searching">🔍 寻找人体…</string>
+    <string name="capture_full_body">✓ 全身入镜，可以拍照</string>
+    <string name="capture_not_full">⚠️ 请确保头顶到脚底都在画面内</string>
+    <string name="capture_no_body">未检测到人体，请调整位置</string>
+    <string name="capture_camera_error">⚠️ 无法访问相机</string>
+    <string name="capture_permission">需要相机权限才能评估体态</string>
+
+    <!-- 结果 -->
+    <string name="result_title">诊断结果</string>
+    <string name="result_perfect">🎉 你的体态很棒</string>
+    <string name="result_perfect_desc">未检测到明显的体态偏差，继续保持！</string>
+    <string name="result_start_training">开始针对性训练</string>
+    <string name="result_back_home">返回首页</string>
+
+    <!-- 训练 -->
+    <string name="training_title">今日训练</string>
+    <string name="training_start">开始</string>
+    <string name="training_pause">暂停</string>
+    <string name="training_reset">重置</string>
+    <string name="training_done">标记完成</string>
+    <string name="training_done_again">再点取消</string>
+
+    <!-- 记录 -->
+    <string name="progress_title">训练记录</string>
+    <string name="progress_empty">还没有记录</string>
+    <string name="progress_start_now">完成一次体态评估，开始跟踪你的变化</string>
+
+    <!-- 关于 -->
+    <string name="about_title">核心理念</string>
+
+    <!-- 训练动作（基础） -->
+    <string name="ex_muscle_compensating">代偿肌（看起来紧的 — 不是问题根源）</string>
+    <string name="ex_muscle_root">该发力却没发力的（这才是根源）</string>
+</resources>

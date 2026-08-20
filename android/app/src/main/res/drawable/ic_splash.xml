@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- 背景圆 -->
+    <path
+        android:fillColor="#0F766E"
+        android:pathData="M0,0h120v120h-120z" />
+
+    <!-- 中心图标（人形剪影 + 圆点） -->
+    <path
+        android:fillColor="#FCD34D"
+        android:pathData="M60,20 m-12,0 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0" />
+
+    <!-- 身体 -->
+    <path
+        android:fillColor="#FCD34D"
+        android:pathData="M50,38 L70,38 L72,90 L60,90 L60,70 L48,90 L48,70 L48,90 L48,90" />
+
+    <path
+        android:fillColor="#FCD34D"
+        android:strokeColor="#FCD34D"
+        android:strokeWidth="6"
+        android:pathData="M55,38 L55,68 M65,38 L65,68 M55,68 L48,90 M65,68 L72,90" />
+</vector>

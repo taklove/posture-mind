@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 主色：深绿松石 -->
+    <color name="primary">#0F766E</color>
+    <color name="primary_dark">#134E4A</color>
+    <color name="primary_light">#14B8A6</color>
+
+    <!-- 强调色：暖橙 -->
+    <color name="accent">#F59E0B</color>
+    <color name="accent_light">#FCD34D</color>
+
+    <!-- 状态色 -->
+    <color name="success">#10B981</color>
+    <color name="warning">#F59E0B</color>
+    <color name="danger">#EF4444</color>
+
+    <!-- 中性色 -->
+    <color name="bg">#FAFAF7</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="text_primary">#1E293B</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="text_tertiary">#94A3B8</color>
+    <color name="border">#E2E8F0</color>
+</resources>

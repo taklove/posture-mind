@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0F766E" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>正形 · PostureMind</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧘</text></svg>" />
+  <link rel="manifest" href="manifest.json" />
+</head>
+<body>
+  <!-- 应用主容器 -->
+  <div id="app">
+
+    <!-- ========== 启动加载 ========== -->
+    <section class="screen screen-loading active" data-screen="loading">
+      <div class="loading-content">
+        <div class="logo-pulse">🧘</div>
+        <h1 class="app-title">正形</h1>
+        <p class="app-subtitle">PostureMind</p>
+        <p class="loading-text">加载体态模型中…</p>
+      </div>
+    </section>
+
+    <!-- ========== 首页（哲学介绍） ========== -->
+    <section class="screen" data-screen="home">
+      <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+          <div class="logo-row">
+            <span class="logo-emoji">🧘</span>
+            <span class="logo-text">正形</span>
+          </div>
+          <h1 class="hero-title">找到那块<br/><span class="accent">该有力却无力</span><br/>的肌肉</h1>
+          <p class="hero-subtitle">体态问题，不是"哪里太紧"<br/>而是<span class="accent">哪里该发力却没发力</span></p>
+          <button class="btn btn-primary btn-large" data-action="goto:capture">
+            开始评估 →
+          </button>
+          <button class="btn btn-ghost" data-action="goto:about">
+            了解理念
+          </button>
+        </div>
+      </header>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📸</div>
+          <h3>拍照即分析</h3>
+          <p>3 张照片（正/侧/背），AI 识别你的体态问题</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>精准诊断</h3>
+          <p>不是看哪块肌肉紧，而是看哪块该发力却没发</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💪</div>
+          <h3>针对训练</h3>
+          <p>每天 10 分钟，唤醒沉睡的肌肉</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📈</div>
+          <h3>持续跟踪</h3>
+          <p>每周重新评估，看见身体的变化</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 拍照页面 ========== -->
+    <section class="screen" data-screen="capture">
+      <header class="topbar">
+        <button class="btn-back" data-action="goto:home">←</button>
+        <h2>体态拍摄</h2>
+        <div></div>
+      </header>
+
+      <div class="capture-instructions">
+        <p class="hint">📌 请按顺序拍摄 3 个角度</p>
+      </div>
+
+      <div class="view-tabs">
+        <button class="view-tab active" data-view="front">正面</button>
+        <button class="view-tab" data-view="side">侧面</button>
+        <button class="view-tab" data-view="back">背面</button>
+      </div>
+
+      <div class="capture-area">
+        <video id="video" playsinline autoplay muted></video>
+        <canvas id="poseCanvas"></canvas>
+        <div class="capture-overlay" id="captureOverlay">
+          <div class="pose-guide" id="poseGuide">
+            <svg viewBox="0 0 200 400" class="pose-silhouette" id="silhouette">
+              <!-- 简化的身体轮廓引导 -->
+            </svg>
+          </div>
+        </div>
+        <div class="capture-status" id="captureStatus">准备就绪</div>
+      </div>
+
+      <div class="capture-actions">
+        <button class="btn btn-secondary" id="uploadBtn">
+          <span>📁</span> 上传照片
+        </button>
+        <button class="btn btn-primary btn-capture" id="captureBtn">
+          <span class="capture-icon"></span>
+        </button>
+        <button class="btn btn-secondary" id="analyzeBtn" disabled>
+          <span>🔍</span> 分析
+        </button>
+      </div>
+
+      <input type="file" id="fileInput" accept="image/*" hidden />
+
+      <div class="capture-tips">
+        <details>
+          <summary>📖 拍摄指南</summary>
+          <ul>
+            <li><strong>正面</strong>：双脚与肩同宽，双手自然下垂，正对镜头</li>
+            <li><strong>侧面</strong>：身体侧对镜头，自然站立，视线平视前方</li>
+            <li><strong>背面</strong>：背对镜头，双手自然下垂</li>
+            <li>穿着贴身衣物效果最佳（能看到身体线条）</li>
+            <li>确保<strong>全身</strong>在画面内，头顶到脚底</li>
+            <li>光线充足，背景简洁</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- ========== 分析结果 ========== -->
+    <section class="screen" data-screen="result">
+      <header class="topbar">
+        <button class="btn-back" data-action="goto:capture">←</button>
+        <h2>诊断结果</h2>
+        <div></div>
+      </header>
+
+      <div class="result-summary" id="resultSummary"></div>
+
+      <div class="result-canvas-wrap">
+        <canvas id="resultCanvas"></canvas>
+      </div>
+
+      <div class="issues-list" id="issuesList"></div>
+
+      <div class="result-actions">
+        <button class="btn btn-primary btn-large" data-action="goto:training">
+          开始针对性训练 →
+        </button>
+        <button class="btn btn-ghost" data-action="goto:home">
+          返回首页
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== 训练页面 ========== -->
+    <section class="screen" data-screen="training">
+      <header class="topbar">
+        <button class="btn-back" data-action="goto:result">←</button>
+        <h2>今日训练</h2>
+        <div></div>
+      </header>
+
+      <div class="training-summary" id="trainingSummary"></div>
+
+      <div class="exercise-list" id="exerciseList"></div>
+
+      <div class="training-progress" id="trainingProgress">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="progress-text" id="progressText">0 / 0 完成</p>
+      </div>
+    </section>
+
+    <!-- ========== 训练详情 ========== -->
+    <section class="screen" data-screen="exercise">
+      <header class="topbar">
+        <button class="btn-back" data-action="goto:training">←</button>
+        <h2 id="exerciseTitle">动作详情</h2>
+        <div></div>
+      </header>
+
+      <div class="exercise-detail" id="exerciseDetail">
+        <!-- 动态填充 -->
+      </div>
+    </section>
+
+    <!-- ========== 关于 / 理念 ========== -->
+    <section class="screen" data-screen="about">
+      <header class="topbar">
+        <button class="btn-back" data-action="goto:home">←</button>
+        <h2>核心理念</h2>
+        <div></div>
+      </header>
+
+      <div class="about-content">
+        <h2 class="about-title">体态问题的真相</h2>
+        <p class="about-lead">
+          几乎所有的体态问题，都遵循一个规律：<br/>
+          <span class="accent-strong">不是"哪块肌肉太紧"，而是"哪块肌肉该发力却没在发力"。</span>
+        </p>
+
+        <div class="concept-block">
+          <h3>🔍 案例：头前伸</h3>
+          <p>你觉得是"上斜方肌太紧了，所以耸肩"。但其实——</p>
+          <div class="comparison">
+            <div class="comp-row comp-symptom">
+              <span class="comp-tag">代偿肌（看起来紧的）</span>
+              <span>上斜方肌 · 肩胛提肌</span>
+            </div>
+            <div class="comp-row comp-root">
+              <span class="comp-tag">该发力却没在发力的</span>
+              <span>颈深屈肌 · 下斜方肌 · 前锯肌</span>
+            </div>
+          </div>
+          <p class="insight">💡 真正的解决方案不是按摩放松上斜方肌，而是<strong>激活</strong>颈深屈肌和下斜方肌。当你把头收回正确位置时，上斜方肌自然就不需要那么紧了。</p>
+        </div>
+
+        <div class="concept-block">
+          <h3>🔍 案例：骨盆前倾</h3>
+          <p>你觉得是"髂腰肌太紧，所以骨盆被拉向前"。但其实——</p>
+          <div class="comparison">
+            <div class="comp-row comp-symptom">
+              <span class="comp-tag">代偿肌（看起来紧的）</span>
+              <span>髂腰肌 · 竖脊肌</span>
+            </div>
+            <div class="comp-row comp-root">
+              <span class="comp-tag">该发力却没在发力的</span>
+              <span>臀大肌 · 腹横肌 · 腘绳肌</span>
+            </div>
+          </div>
+          <p class="insight">💡 拉伸髂腰肌只能暂时缓解。真正的解决是<strong>唤醒臀大肌</strong>，让骨盆有向后倾的原动力。</p>
+        </div>
+
+        <div class="concept-block">
+          <h3>🎯 治疗逻辑</h3>
+          <ol class="logic-list">
+            <li><strong>识别</strong>：从照片/视频看出你的体态偏差</li>
+            <li><strong>归因</strong>：定位是哪个"该发力的肌肉"在偷懒</li>
+            <li><strong>激活</strong>：通过针对性训练唤醒它（神经肌肉再教育）</li>
+            <li><strong>整合</strong>：在日常动作中让新模式成为习惯</li>
+          </ol>
+        </div>
+
+        <div class="philosophy-footer">
+          <p>这不是"治症状"，而是"治根源"。<br/>每一块紧张的肌肉背后，都有一块沉睡的肌肉。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 进度页 ========== -->
+    <section class="screen" data-screen="progress">
+      <header class="topbar">
+        <button class="btn-back" data-action="goto:home">←</button>
+        <h2>训练记录</h2>
+        <div></div>
+      </header>
+      <div class="progress-content" id="progressContent">
+        <!-- 动态填充 -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 底部导航 -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="nav-item active" data-nav="home">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">首页</span>
+    </button>
+    <button class="nav-item" data-nav="capture">
+      <span class="nav-icon">📸</span>
+      <span class="nav-label">评估</span>
+    </button>
+    <button class="nav-item" data-nav="training">
+      <span class="nav-icon">💪</span>
+      <span class="nav-label">训练</span>
+    </button>
+    <button class="nav-item" data-nav="progress">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">记录</span>
+    </button>
+  </nav>
+
+  <!-- Toast 提示 -->
+  <div id="toast" class="toast"></div>
+
+  <!-- MediaPipe Tasks Vision -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs" type="module"></script>
+
+  <!-- 业务脚本 -->
+  <script src="knowledge.js"></script>
+  <script src="analyzer.js"></script>
+  <script src="exercises-ui.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

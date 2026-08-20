@@ -1,0 +1,18 @@
+{
+  "server": "47.77.202.75",
+  "user": "root",
+  "sshKey": "C:\\Users\\Lilydai\\.ssh\\ali_overseas_openssh",
+  "sshPort": 22,
+  "remoteDir": "/var/www/posturemind",
+  "nginxReload": true,
+  "domain": "https://manus.xin",
+  "files": [
+    "index.html",
+    "styles.css",
+    "app.js",
+    "knowledge.js",
+    "analyzer.js",
+    "exercises-ui.js",
+    "manifest.json"
+  ]
+}
