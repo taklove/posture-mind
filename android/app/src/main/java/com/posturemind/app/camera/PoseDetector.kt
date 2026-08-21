@@ -85,7 +85,7 @@ class PoseDetector(
                 x = it.x(),
                 y = it.y(),
                 z = it.z(),
-                visibility = it.visibility()
+                visibility = it.visibility().orElse(0f)
             )
         }
     }
