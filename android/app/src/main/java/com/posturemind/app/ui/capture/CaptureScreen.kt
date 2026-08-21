@@ -82,6 +82,15 @@ fun CaptureScreen(
 
     val cameraPermission = rememberPermissionState(Manifest.permission.CAMERA)
 
+    // 拍齐 3 张自动跳到结果页（用 ref 防止多次触发）
+    val navigated = androidx.compose.runtime.remember { mutableStateOf(false) }
+    LaunchedEffect(state.captured.size) {
+        if (state.captured.size == 3 && !navigated.value) {
+            navigated.value = true
+            onAnalyze()
+        }
+    }
+
     LaunchedEffect(Unit) {
         if (!cameraPermission.status.isGranted) {
             cameraPermission.launchPermissionRequest()
