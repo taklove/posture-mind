@@ -2,7 +2,6 @@ package com.posturemind.app.ui.capture
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.util.Log
 import android.view.ViewGroup
@@ -179,14 +178,15 @@ fun CameraArea(
                                         statusMessage = "⚠️ 拍照失败"
                                         return
                                     }
-                                    // 运行 MediaPipe
+                                    // 运行 MediaPipe（拿就拿，没有也不阻塞保存）
                                     poseDetector.detect(bitmap)
                                     val points = poseDetector.toAnalyzerPoints()
-                                    if (points.isNotEmpty() && isFullBodyVisible(points)) {
-                                        onCapture(bitmap, points)
-                                        statusMessage = "✓ ${currentView.displayName}已拍摄"
-                                    } else {
-                                        statusMessage = "⚠️ 未检测到完整人体"
+                                    // **总是保存照片**，只根据人体检测情况给提示
+                                    onCapture(bitmap, points)
+                                    statusMessage = when {
+                                        points.isEmpty() -> "✓ ${currentView.displayName}已保存（未检测到人体，分析时可能用不上）"
+                                        !isFullBodyVisible(points) -> "✓ ${currentView.displayName}已保存（人体不全，分析精度会下降）"
+                                        else -> "✓ ${currentView.displayName}已拍摄"
                                     }
                                     isProcessing.value = false
                                 }
@@ -251,18 +251,15 @@ private fun startCamera(
 
 @androidx.camera.core.ExperimentalGetImage
 private fun imageProxyToBitmap(image: ImageProxy): Bitmap? {
-    val buffer = image.planes[0].buffer
-    val bytes = ByteArray(buffer.remaining())
-    buffer.get(bytes)
-    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size) ?: return null
-
-    // 旋转
+    // ImageCapture 默认输出 YUV_420_888，CameraX 1.3+ 提供了 toBitmap() 扩展
+    // 内部用 ImageProxy 内部的 YUV→RGB 转换，比手写 plane 拼装稳得多
+    val raw = image.toBitmap()
     val rotation = image.imageInfo.rotationDegrees
     return if (rotation != 0) {
         val matrix = Matrix().apply { postRotate(rotation.toFloat()) }
-        Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        Bitmap.createBitmap(raw, 0, 0, raw.width, raw.height, matrix, true)
     } else {
-        bitmap
+        raw
     }
 }
 

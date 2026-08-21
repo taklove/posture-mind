@@ -127,7 +127,16 @@ fun CaptureScreen(
             onSelect = { viewModel.setCurrentView(it) }
         )
 
-        Spacer(Modifier.height(12.dp))
+        // 当前视角的拍摄提示
+        Text(
+            text = currentViewHint(state.currentView),
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 2.dp),
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(Modifier.height(8.dp))
 
         if (cameraPermission.status.isGranted) {
             CameraArea(
@@ -154,6 +163,13 @@ fun CaptureScreen(
             }
         }
     }
+}
+
+@Composable
+private fun currentViewHint(view: CaptureView): String = when (view) {
+    CaptureView.FRONT -> "👤 面对镜头，双手自然下垂"
+    CaptureView.SIDE -> "👤 侧面站立，看不到的那侧贴镜头都行"
+    CaptureView.BACK -> "👤 背对镜头，双手自然下垂"
 }
 
 @Composable
