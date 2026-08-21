@@ -18,7 +18,7 @@ private val Context.authStore by preferencesDataStore(name = "auth")
 
 /**
  * 鉴权仓库
- * - 调用 https://manus.xin/api/auth/* 拿 JWT
+ * - 调用 manus.xin 下的 /api/auth/ 端点拿 JWT
  * - 把 token / user_id / phone 存到独立 DataStore（跟历史数据分开）
  */
 class AuthRepository(private val context: Context) {
