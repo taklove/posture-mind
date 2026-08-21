@@ -23,25 +23,39 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.posturemind.app.data.AuthRepository
 import com.posturemind.app.ui.theme.CompensatingMuscleBg
 import com.posturemind.app.ui.theme.CompensatingMuscleFg
 import com.posturemind.app.ui.theme.Primary
 import com.posturemind.app.ui.theme.PrimaryDark
 import com.posturemind.app.ui.theme.RootMuscleBg
 import com.posturemind.app.ui.theme.RootMuscleFg
+import kotlinx.coroutines.launch
 
 @Composable
-fun AboutScreen(onBack: () -> Unit) {
+fun AboutScreen(
+    onBack: () -> Unit,
+    onLogout: () -> Unit = {}
+) {
+    val context = LocalContext.current
+    val auth = androidx.compose.runtime.remember { AuthRepository(context) }
+    val phone by auth.phoneFlow.collectAsState(initial = null)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -148,6 +162,29 @@ fun AboutScreen(onBack: () -> Unit) {
             )
 
             Spacer(Modifier.size(40.dp))
+
+            // 账号信息 + 退出
+            if (!phone.isNullOrEmpty()) {
+                Text(
+                    "当前账号：$phone",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(Modifier.size(12.dp))
+            }
+            val scope = rememberCoroutineScope()
+            OutlinedButton(
+                onClick = {
+                    scope.launch {
+                        auth.logout()
+                        onLogout()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+            ) {
+                Text("退出登录", color = MaterialTheme.colorScheme.onSurface)
+            }
         }
     }
 }

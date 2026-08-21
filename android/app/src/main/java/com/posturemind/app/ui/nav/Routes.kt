@@ -1,6 +1,7 @@
 package com.posturemind.app.ui.nav
 
 object Routes {
+    const val LOGIN = "login"
     const val HOME = "home"
     const val CAPTURE = "capture"
     const val RESULT = "result"
