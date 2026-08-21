@@ -60,7 +60,10 @@ fun ResultScreen(
     onBack: () -> Unit
 ) {
     val state by viewModel.assessment.collectAsState()
-    val issues = state.lastResult?.issues ?: emptyList()
+    val trainingState by viewModel.training.collectAsState()
+    // IssueCard 需要 PostureIssue 完整信息（pattern.shortDesc / 代偿肌 / 该发力肌），
+    // 这些只在 runFinalAnalysis 写入的 training.issues 里有
+    val issues = trainingState.issues
 
     Column(
         modifier = Modifier
@@ -250,6 +253,7 @@ private fun IssueCard(issue: PostureIssue) {
     }
 }
 
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 private fun MuscleSection(
     label: String,

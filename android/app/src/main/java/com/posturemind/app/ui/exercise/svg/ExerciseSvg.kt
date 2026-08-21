@@ -34,9 +34,9 @@ fun ExerciseSvg(svgKey: String) {
         when (svgKey) {
             "chinTuck" -> {
                 // 头
-                drawCircle(skinColor, 50f, Offset(cx - 30, cy - 60), 30f, stroke = skinStroke)
+                drawCircle(skinColor, 50f, Offset(cx - 30, cy - 60), stroke = skinStroke)
                 // 脖子
-                drawLine(skinColor, Offset(cx, cy - 30), Offset(cx, cy), strokeWidth = 12f, stroke = skinStroke)
+                drawLine(skinColor, Offset(cx, cy - 30), Offset(cx, cy), strokeWidth = 12f)
                 // 躯干
                 drawRect(bodyColor, Offset(cx - 25, cy), Size(50f, 100f))
                 // 箭头（往内收）
