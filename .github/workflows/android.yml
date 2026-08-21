@@ -89,8 +89,7 @@ jobs:
       - name: Find generated APKs
         id: find_apks
         run: |
-          cd android
-          echo "apk_paths=$(find app/build/outputs/apk -name '*.apk' -type f | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          echo "apk_paths=$(find android/app/build/outputs/apk -name '*.apk' -type f | tr '\n' ' ')" >> $GITHUB_OUTPUT
 
       - name: Upload APK artifacts
         uses: actions/upload-artifact@v4
