@@ -144,6 +144,12 @@ fun CaptureScreen(
                 onPoseDetected = { landmarks -> /* no-op for preview */ },
                 onCapture = { bitmap, landmarks ->
                     viewModel.saveCapturedFrame(state.currentView, bitmap, landmarks)
+                    // 拍完一张后自动切到下一个未拍的角度
+                    val captured = state.captured.keys + state.currentView
+                    if (captured.size < 3) {
+                        val next = CaptureView.entries.firstOrNull { it !in captured }
+                        if (next != null) viewModel.setCurrentView(next)
+                    }
                 }
             )
         } else {
@@ -152,15 +158,37 @@ fun CaptureScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        if (state.captured.size == 3) {
-            Button(
-                onClick = onAnalyze,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).height(56.dp),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Primary)
-            ) {
-                Text("🔍 分析 3 张照片", fontWeight = FontWeight.SemiBold)
-            }
+        // 大"下一步"按钮：拍到 1-2 张时切下一张；拍齐 3 张时跳到分析
+        val capturedCount = state.captured.size
+        Button(
+            onClick = {
+                if (capturedCount == 3) {
+                    onAnalyze()
+                } else {
+                    val captured = state.captured.keys
+                    val next = CaptureView.entries.firstOrNull { it !in captured }
+                    if (next != null) viewModel.setCurrentView(next)
+                }
+            },
+            enabled = capturedCount > 0,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .height(56.dp),
+            shape = RoundedCornerShape(14.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (capturedCount == 3) Primary else Primary.copy(alpha = 0.85f)
+            )
+        ) {
+            Text(
+                when {
+                    capturedCount == 0 -> "👆 拍下面板上的白圈开始"
+                    capturedCount < 3 -> "下一张（${capturedCount}/3）→"
+                    else -> "🔍 分析 3 张照片"
+                },
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 15.sp
+            )
         }
     }
 }

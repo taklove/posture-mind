@@ -77,6 +77,7 @@ fun CameraArea(
 
     val poseDetector = remember { PoseDetector(context) }
     val scope = rememberCoroutineScope()
+    var cameraReady by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         poseDetector.setup()
@@ -112,7 +113,7 @@ fun CameraArea(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(500.dp)
+                .height(360.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .background(Color(0xFF1E293B))
                 .border(1.dp, Primary.copy(alpha = 0.3f), RoundedCornerShape(20.dp))
@@ -126,7 +127,13 @@ fun CameraArea(
                         )
                         scaleType = PreviewView.ScaleType.FILL_CENTER
                     }
-                    imageCaptureRef.value = startCamera(ctx, lifecycleOwner, previewView, poseDetector)
+                    imageCaptureRef.value = startCamera(
+                        ctx, lifecycleOwner, previewView, poseDetector
+                    ) { realCapture ->
+                        // 真正的 ImageCapture 绑定好了才允许拍照
+                        imageCaptureRef.value = realCapture
+                        cameraReady = true
+                    }
                     previewView
                 },
                 modifier = Modifier.fillMaxSize()
@@ -163,9 +170,9 @@ fun CameraArea(
                 modifier = Modifier
                     .size(72.dp)
                     .clip(CircleShape)
-                    .background(Color.White)
+                    .background(if (cameraReady && !isProcessing.value) Color.White else Color.LightGray)
                     .border(4.dp, Primary, CircleShape)
-                    .clickable(enabled = !isProcessing.value) {
+                    .clickable(enabled = cameraReady && !isProcessing.value) {
                         val capture = imageCaptureRef.value
                         if (capture == null || isProcessing.value) return@clickable
                         isProcessing.value = true
@@ -226,10 +233,11 @@ private fun startCamera(
     context: Context,
     lifecycleOwner: androidx.lifecycle.LifecycleOwner,
     previewView: PreviewView,
-    poseDetector: PoseDetector
+    poseDetector: PoseDetector,
+    onReady: (ImageCapture) -> Unit
 ): ImageCapture {
     val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-    var imageCapture: ImageCapture? = null
+    var realImageCapture: ImageCapture? = null
 
     cameraProviderFuture.addListener({
         try {
@@ -238,7 +246,7 @@ private fun startCamera(
                 it.setSurfaceProvider(previewView.surfaceProvider)
             }
 
-            imageCapture = ImageCapture.Builder()
+            realImageCapture = ImageCapture.Builder()
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                 .build()
 
@@ -247,14 +255,17 @@ private fun startCamera(
                 lifecycleOwner,
                 CameraSelector.DEFAULT_BACK_CAMERA,
                 preview,
-                imageCapture
+                realImageCapture
             )
+            // 通知 CameraArea 真正可用的 ImageCapture
+            realImageCapture?.let { onReady(it) }
         } catch (e: Exception) {
             Log.e(TAG, "Camera binding failed", e)
         }
     }, ContextCompat.getMainExecutor(context))
 
-    return imageCapture ?: ImageCapture.Builder().build()
+    // 先返回一个默认占位的，等真绑定好了再覆盖
+    return ImageCapture.Builder().build()
 }
 
 @androidx.camera.core.ExperimentalGetImage
