@@ -30,7 +30,7 @@ class AuthRepository(private val context: Context) {
     suspend fun currentToken(): String? = context.authStore.data.first()[KEY_TOKEN]
 
     suspend fun sendCode(phone: String): Result<Unit> = withContext(Dispatchers.IO) {
-        runCatching {
+        runCatching<Unit> {
             val body = JSONObject().put("phone", phone).toString()
             val resp = post("/api/auth/send-code", body, token = null)
             val json = JSONObject(resp)
@@ -41,7 +41,7 @@ class AuthRepository(private val context: Context) {
     }
 
     suspend fun verify(phone: String, code: String): Result<Unit> = withContext(Dispatchers.IO) {
-        runCatching {
+        runCatching<Unit> {
             val body = JSONObject().put("phone", phone).put("code", code).toString()
             val resp = post("/api/auth/verify", body, token = null)
             val json = JSONObject(resp)
@@ -53,6 +53,7 @@ class AuthRepository(private val context: Context) {
                 prefs[KEY_PHONE] = phone
                 prefs[KEY_USER_ID] = userId
             }
+            Unit
         }
     }
 
