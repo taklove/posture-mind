@@ -36,6 +36,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,6 +55,7 @@ import com.posturemind.app.data.CaptureView
 import com.posturemind.app.data.PostureAnalyzer
 import com.posturemind.app.ui.theme.Primary
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.Executors
 
@@ -74,6 +76,7 @@ fun CameraArea(
     val isProcessing = remember { mutableStateOf(false) }
 
     val poseDetector = remember { PoseDetector(context) }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         poseDetector.setup()
@@ -178,17 +181,22 @@ fun CameraArea(
                                         statusMessage = "⚠️ 拍照失败"
                                         return
                                     }
-                                    // 运行 MediaPipe（拿就拿，没有也不阻塞保存）
-                                    poseDetector.detect(bitmap)
-                                    val points = poseDetector.toAnalyzerPoints()
-                                    // **总是保存照片**，只根据人体检测情况给提示
-                                    onCapture(bitmap, points)
-                                    statusMessage = when {
-                                        points.isEmpty() -> "✓ ${currentView.displayName}已保存（未检测到人体，分析时可能用不上）"
-                                        !isFullBodyVisible(points) -> "✓ ${currentView.displayName}已保存（人体不全，分析精度会下降）"
-                                        else -> "✓ ${currentView.displayName}已拍摄"
+                                    // MediaPipe 推理是 CPU 密集（200-1000ms），必须丢到后台线程，
+                                    // 不然会卡主线程，整个 UI 冻住，点 tab 都没反应
+                                    scope.launch {
+                                        val points = withContext(Dispatchers.Default) {
+                                            poseDetector.detect(bitmap)
+                                            poseDetector.toAnalyzerPoints()
+                                        }
+                                        // **总是保存照片**，只根据人体检测情况给提示
+                                        onCapture(bitmap, points)
+                                        statusMessage = when {
+                                            points.isEmpty() -> "✓ ${currentView.displayName}已保存（未检测到人体，分析时可能用不上）"
+                                            !isFullBodyVisible(points) -> "✓ ${currentView.displayName}已保存（人体不全，分析精度会下降）"
+                                            else -> "✓ ${currentView.displayName}已拍摄"
+                                        }
+                                        isProcessing.value = false
                                     }
-                                    isProcessing.value = false
                                 }
 
                                 override fun onError(exception: ImageCaptureException) {
