@@ -96,20 +96,20 @@ private fun DrawScope.drawChinTuck(p: Float, pulse: Float, cx: Float, cy: Float)
     val dx = (p - 0.5f) * 30f  // 头水平往回收
 
     // 躯干（肩膀 + 上背）
-    pRoundRect(BODY, Offset(cx - 70, cy + 20), Size(140, 110), 16f)
-    pRoundRect(BODY_LIGHT, Offset(cx - 70, cy + 20), Size(140, 30), 16f)
+    pRoundRect(BODY, Offset(cx - 70, cy + 20), Size(140f, 110), 16f)
+    pRoundRect(BODY_LIGHT, Offset(cx - 70, cy + 20), Size(140f, 30), 16f)
     // 脖子
-    pRoundRect(SKIN, Offset(cx - 18 + dx, cy - 35), Size(36, 50), 8f)
-    pRoundRect(SKIN_DARK.copy(alpha = 0.15f), Offset(cx - 18 + dx, cy - 35), Size(36, 50), 8f)
+    pRoundRect(SKIN, Offset(cx - 18 + dx, cy - 35), Size(36f, 50), 8f)
+    pRoundRect(SKIN_DARK.copy(alpha = 0.15f), Offset(cx - 18 + dx, cy - 35), Size(36f, 50), 8f)
     // 头
     pCircle(SKIN, 36f, Offset(cx + dx, cy - 80), stroke = SKIN_DARK)
     // 头发
-    pPath(SKIN_DARK, Offset(cx - 32 + dx, cy - 100), Size(64, 30), 16f)
+    pPath(SKIN_DARK, Offset(cx - 32 + dx, cy - 100), Size(64f, 30), 16f)
     // 眼睛
     pCircle(Color.Black, 2f, Offset(cx + 12 + dx, cy - 80))
 
     // 主训肌群：颈深屈肌（脖子前面）
-    pMuscle("颈深屈肌", Offset(cx - 12 + dx, cy - 15), Size(28, 36), MUSCLE, pulse)
+    pMuscle("颈深屈肌", Offset(cx - 12 + dx, cy - 15), Size(28f, 36), MUSCLE, pulse)
 
     // 箭头
     val arrA = (sin(p * Math.PI.toFloat()) * 0.5f + 0.5f).coerceIn(0f, 1f)
@@ -126,8 +126,8 @@ private fun DrawScope.drawHeadLift(p: Float, pulse: Float, cx: Float, cy: Float)
     pLine(GROUND, Offset(20f, cy + 90), Offset(800f, cy + 90), strokeWidth = 3f)
 
     // 仰卧身体（侧视）—— 躯干水平
-    pRoundRect(BODY, Offset(cx - 110, cy + 10), Size(220, 60), 14f)
-    pRoundRect(BODY_LIGHT, Offset(cx - 110, cy + 10), Size(220, 16), 14f)
+    pRoundRect(BODY, Offset(cx - 110, cy + 10), Size(220f, 60), 14f)
+    pRoundRect(BODY_LIGHT, Offset(cx - 110, cy + 10), Size(220f, 16), 14f)
     // 髋
     pCircle(BODY, 20f, Offset(cx + 50, cy + 40), stroke = SKIN_DARK)
     // 弯腿
@@ -137,14 +137,14 @@ private fun DrawScope.drawHeadLift(p: Float, pulse: Float, cx: Float, cy: Float)
     pThickLine(SKIN_DARK, Offset(cx + 30, cy + 90), Offset(cx + 60, cy + 90), 14f)
 
     // 脖子（侧视）
-    pRoundRect(SKIN, Offset(cx - 150, cy - 10 + dy), Size(40, 50), 10f)
+    pRoundRect(SKIN, Offset(cx - 150, cy - 10 + dy), Size(40f, 50), 10f)
     // 头
     pCircle(SKIN, 28f, Offset(cx - 165, cy - 25 + dy), stroke = SKIN_DARK)
     // 头发
-    pPath(SKIN_DARK, Offset(cx - 180, cy - 50 + dy), Size(40, 28), 14f)
+    pPath(SKIN_DARK, Offset(cx - 180, cy - 50 + dy), Size(40f, 28), 14f)
 
     // 主训肌群：颈深屈肌（脖子前面）
-    pMuscle("颈深屈肌", Offset(cx - 130, cy - 5 + dy), Size(26, 32), MUSCLE, pulse)
+    pMuscle("颈深屈肌", Offset(cx - 130, cy - 5 + dy), Size(26f, 32), MUSCLE, pulse)
 }
 
 // =====================================================
@@ -157,13 +157,13 @@ private fun DrawScope.drawProneY(p: Float, pulse: Float, cx: Float, cy: Float) {
     pLine(GROUND, Offset(20f, cy + 90), Offset(800f, cy + 90), strokeWidth = 3f)
 
     // 俯卧身体（侧视）—— 头在左
-    pRoundRect(BODY, Offset(cx - 120, cy + 30), Size(220, 50), 14f)
+    pRoundRect(BODY, Offset(cx - 120, cy + 30), Size(220f, 50), 14f)
     // 髋/腿
     pThickLine(BODY, Offset(cx + 100, cy + 55), Offset(cx + 160, cy + 80), 28f)
     pThickLine(SKIN_DARK, Offset(cx + 160, cy + 80), Offset(cx + 170, cy + 90), 16f)
     // 头（侧视）
     pCircle(SKIN, 26f, Offset(cx - 140, cy + 35), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 158, cy + 12), Size(36, 26), 12f)
+    pPath(SKIN_DARK, Offset(cx - 158, cy + 12), Size(36f, 26), 12f)
 
     // 手臂 Y 形举起
     pThickLine(ACCENT, Offset(cx - 80, cy + 30), Offset(cx - 130 - arm, cy - 30), 18f)
@@ -173,7 +173,7 @@ private fun DrawScope.drawProneY(p: Float, pulse: Float, cx: Float, cy: Float) {
     pCircle(SKIN, 10f, Offset(cx - 30 + arm, cy - 30), stroke = SKIN_DARK)
 
     // 主训肌群：下斜方肌（肩胛之间）
-    pMuscle("下斜方肌", Offset(cx - 40, cy + 20), Size(60, 28), MUSCLE, pulse)
+    pMuscle("下斜方肌", Offset(cx - 40, cy + 20), Size(60f, 28), MUSCLE, pulse)
 }
 
 // =====================================================
@@ -190,11 +190,11 @@ private fun DrawScope.drawWallSlide(p: Float, pulse: Float, cx: Float, cy: Float
     // 人体（侧视）—— 头靠墙
     // 头
     pCircle(SKIN, 30f, Offset(cx - 70, cy - 100), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 86, cy - 125), Size(40, 28), 14f)
+    pPath(SKIN_DARK, Offset(cx - 86, cy - 125), Size(40f, 28), 14f)
     // 脖子 + 躯干
-    pRoundRect(BODY, Offset(cx - 85, cy - 70), Size(40, 180), 12f)
+    pRoundRect(BODY, Offset(cx - 85, cy - 70), Size(40f, 180), 12f)
     // 髋
-    pRoundRect(BODY, Offset(cx - 90, cy + 90), Size(50, 30), 12f)
+    pRoundRect(BODY, Offset(cx - 90, cy + 90), Size(50f, 30), 12f)
     // 腿
     pThickLine(BODY, Offset(cx - 65, cy + 120), Offset(cx - 65, cy + 200), 32f)
     pThickLine(BODY, Offset(cx - 40, cy + 120), Offset(cx - 40, cy + 200), 32f)
@@ -206,9 +206,9 @@ private fun DrawScope.drawWallSlide(p: Float, pulse: Float, cx: Float, cy: Float
     pCircle(SKIN, 10f, Offset(cx - 100, cy + 30 + dy), stroke = SKIN_DARK)
 
     // 主训肌群：下斜方肌（肩胛之间）
-    pMuscle("下斜方肌", Offset(cx - 30, cy - 30), Size(50, 24), MUSCLE, pulse)
+    pMuscle("下斜方肌", Offset(cx - 30, cy - 30), Size(50f, 24), MUSCLE, pulse)
     // 副训：前锯肌（肋侧）
-    pMuscle("前锯肌", Offset(cx - 30, cy + 20), Size(40, 30), MUSCLE_2, pulse)
+    pMuscle("前锯肌", Offset(cx - 30, cy + 20), Size(40f, 30), MUSCLE_2, pulse)
 }
 
 // =====================================================
@@ -225,7 +225,7 @@ private fun DrawScope.drawScapPushup(p: Float, pulse: Float, cx: Float, cy: Floa
     pThickLine(BODY, Offset(cx - 100, cy + 50), Offset(cx + 90, cy - 20), 36f)
     // 头
     pCircle(SKIN, 22f, Offset(cx - 120, cy + 50), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 134, cy + 30), Size(28, 22), 11f)
+    pPath(SKIN_DARK, Offset(cx - 134, cy + 30), Size(28f, 22), 11f)
     // 前臂撑地
     pThickLine(BODY, Offset(cx - 120, cy + 60), Offset(cx - 130, cy + 90), 18f)
     pThickLine(SKIN_DARK, Offset(cx - 130, cy + 90), Offset(cx - 100, cy + 90), 14f)
@@ -234,7 +234,7 @@ private fun DrawScope.drawScapPushup(p: Float, pulse: Float, cx: Float, cy: Floa
     pThickLine(SKIN_DARK, Offset(cx + 90, cy - 10), Offset(cx + 100, cy + 90), 12f)
 
     // 主训肌群：前锯肌（肋侧，肩胛下方）
-    pMuscle("前锯肌", Offset(cx + 10, cy - 5 + dy), Size(50, 32), MUSCLE, pulse)
+    pMuscle("前锯肌", Offset(cx + 10, cy - 5 + dy), Size(50f, 32), MUSCLE, pulse)
     // 标记圆（肩胛骨）
     pCircle(MUSCLE_2, radius, Offset(cx - 20, cy + 10 + dy), style = Stroke(2f))
 }
@@ -250,14 +250,14 @@ private fun DrawScope.drawBridge(p: Float, pulse: Float, cx: Float, cy: Float, s
 
     // 头 + 肩（侧视，左侧）
     pCircle(SKIN, 26f, Offset(cx - 140, cy + 70), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 156, cy + 46), Size(34, 26), 13f)
+    pPath(SKIN_DARK, Offset(cx - 156, cy + 46), Size(34f, 26), 13f)
     // 肩膀
-    pRoundRect(BODY, Offset(cx - 110, cy + 60), Size(40, 30), 10f)
+    pRoundRect(BODY, Offset(cx - 110, cy + 60), Size(40f, 30), 10f)
 
     // 躯干（拱起）—— 弧线
-    pArc(BODY, Offset(cx - 70, cy - 20 + arch), Size(180, 100), 180f, 180f, strokeWidth = 36f)
+    pArc(BODY, Offset(cx - 70, cy - 20 + arch), Size(180f, 100), 180f, 180f, strokeWidth = 36f)
     // 高光
-    pArc(BODY_LIGHT, Offset(cx - 70, cy - 20 + arch), Size(180, 100), 180f, 180f, strokeWidth = 12f)
+    pArc(BODY_LIGHT, Offset(cx - 70, cy - 20 + arch), Size(180f, 100), 180f, 180f, strokeWidth = 12f)
 
     // 髋
     pCircle(BODY, 22f, Offset(cx + 70, cy + 30 + arch), stroke = SKIN_DARK)
@@ -273,9 +273,9 @@ private fun DrawScope.drawBridge(p: Float, pulse: Float, cx: Float, cy: Float, s
     }
 
     // 主训肌群：臀大肌（髋后）
-    pMuscle("臀大肌", Offset(cx + 50, cy + 20 + arch), Size(46, 38), MUSCLE, pulse)
+    pMuscle("臀大肌", Offset(cx + 50, cy + 20 + arch), Size(46f, 38), MUSCLE, pulse)
     // 副训：腘绳肌（大腿后）
-    pMuscle("腘绳肌", Offset(cx + 100, cy + 50 + arch / 2), Size(40, 22), MUSCLE_2, pulse)
+    pMuscle("腘绳肌", Offset(cx + 100, cy + 50 + arch / 2), Size(40f, 22), MUSCLE_2, pulse)
 }
 
 // =====================================================
@@ -289,10 +289,10 @@ private fun DrawScope.drawClamshell(p: Float, pulse: Float, cx: Float, cy: Float
 
     // 侧卧身体（侧视）—— 头在左
     pCircle(SKIN, 24f, Offset(cx - 120, cy + 50), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 134, cy + 28), Size(30, 24), 12f)
+    pPath(SKIN_DARK, Offset(cx - 134, cy + 28), Size(30f, 24), 12f)
     // 躯干（侧躺）—— 横放
-    pRoundRect(BODY, Offset(cx - 90, cy + 20), Size(180, 50), 14f)
-    pRoundRect(BODY_LIGHT, Offset(cx - 90, cy + 20), Size(180, 14), 14f)
+    pRoundRect(BODY, Offset(cx - 90, cy + 20), Size(180f, 50), 14f)
+    pRoundRect(BODY_LIGHT, Offset(cx - 90, cy + 20), Size(180f, 14), 14f)
     // 髋
     pCircle(BODY, 20f, Offset(cx + 90, cy + 50), stroke = SKIN_DARK)
 
@@ -305,7 +305,7 @@ private fun DrawScope.drawClamshell(p: Float, pulse: Float, cx: Float, cy: Float
     pThickLine(SKIN_DARK, Offset(cx + 150 - legSpread, cy - 20), Offset(cx + 150 - legSpread, cy + 50), 22f)
 
     // 主训肌群：臀中肌（髋外侧）
-    pMuscle("臀中肌", Offset(cx + 70, cy + 70), Size(34, 24), MUSCLE, pulse)
+    pMuscle("臀中肌", Offset(cx + 70, cy + 70), Size(34f, 24), MUSCLE, pulse)
 }
 
 // =====================================================
@@ -319,9 +319,9 @@ private fun DrawScope.drawSideLegRaise(p: Float, pulse: Float, cx: Float, cy: Fl
 
     // 侧卧身体（侧视）—— 头在左
     pCircle(SKIN, 24f, Offset(cx - 120, cy + 50), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 134, cy + 28), Size(30, 24), 12f)
-    pRoundRect(BODY, Offset(cx - 90, cy + 20), Size(180, 50), 14f)
-    pRoundRect(BODY_LIGHT, Offset(cx - 90, cy + 20), Size(180, 14), 14f)
+    pPath(SKIN_DARK, Offset(cx - 134, cy + 28), Size(30f, 24), 12f)
+    pRoundRect(BODY, Offset(cx - 90, cy + 20), Size(180f, 50), 14f)
+    pRoundRect(BODY_LIGHT, Offset(cx - 90, cy + 20), Size(180f, 14), 14f)
     pCircle(BODY, 20f, Offset(cx + 90, cy + 50), stroke = SKIN_DARK)
 
     // 下方腿（不动）
@@ -332,7 +332,7 @@ private fun DrawScope.drawSideLegRaise(p: Float, pulse: Float, cx: Float, cy: Fl
     pThickLine(SKIN_DARK, Offset(cx + 170, cy - 30 + legDy), Offset(cx + 165, cy - 50 + legDy), 12f)
 
     // 主训肌群：臀中肌（髋外侧）
-    pMuscle("臀中肌", Offset(cx + 70, cy + 70), Size(34, 24), MUSCLE, pulse)
+    pMuscle("臀中肌", Offset(cx + 70, cy + 70), Size(34f, 24), MUSCLE, pulse)
 }
 
 // =====================================================
@@ -346,10 +346,10 @@ private fun DrawScope.drawDeadBug(p: Float, pulse: Float, cx: Float, cy: Float) 
 
     // 仰卧身体（顶视 / 正面）—— 头在顶
     pCircle(SKIN, 26f, Offset(cx, cy - 100), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 16, cy - 124), Size(32, 26), 12f)
+    pPath(SKIN_DARK, Offset(cx - 16, cy - 124), Size(32f, 26), 12f)
     // 躯干
-    pRoundRect(BODY, Offset(cx - 40, cy - 70), Size(80, 140), 18f)
-    pRoundRect(BODY_LIGHT, Offset(cx - 40, cy - 70), Size(80, 30), 18f)
+    pRoundRect(BODY, Offset(cx - 40, cy - 70), Size(80f, 140), 18f)
+    pRoundRect(BODY_LIGHT, Offset(cx - 40, cy - 70), Size(80f, 30), 18f)
 
     // 双臂（向上）
     pThickLine(SKIN, Offset(cx - 25, cy - 30), Offset(cx - 80, cy - 70), 16f)
@@ -364,9 +364,9 @@ private fun DrawScope.drawDeadBug(p: Float, pulse: Float, cx: Float, cy: Float) 
     pThickLine(SKIN_DARK, Offset(cx + 18 - ext, cy + 130), Offset(cx + 8 - ext, cy + 140), 12f)
 
     // 主训肌群：腹横肌（核心）
-    pMuscle("腹横肌", Offset(cx, cy + 5), Size(50, 50), MUSCLE, pulse)
+    pMuscle("腹横肌", Offset(cx, cy + 5), Size(50f, 50), MUSCLE, pulse)
     // 副训：多裂肌（腰后）
-    pMuscle("多裂肌", Offset(cx, cy + 50), Size(36, 22), MUSCLE_2, pulse)
+    pMuscle("多裂肌", Offset(cx, cy + 50), Size(36f, 22), MUSCLE_2, pulse)
 }
 
 // =====================================================
@@ -380,10 +380,10 @@ private fun DrawScope.drawBirdDog(p: Float, pulse: Float, cx: Float, cy: Float) 
 
     // 四点支撑身体（侧视）—— 头在左
     pCircle(SKIN, 24f, Offset(cx - 130, cy + 50), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 144, cy + 28), Size(30, 24), 12f)
+    pPath(SKIN_DARK, Offset(cx - 144, cy + 28), Size(30f, 24), 12f)
     // 躯干（水平）
-    pRoundRect(BODY, Offset(cx - 100, cy + 30), Size(180, 50), 14f)
-    pRoundRect(BODY_LIGHT, Offset(cx - 100, cy + 30), Size(180, 14), 14f)
+    pRoundRect(BODY, Offset(cx - 100, cy + 30), Size(180f, 50), 14f)
+    pRoundRect(BODY_LIGHT, Offset(cx - 100, cy + 30), Size(180f, 14), 14f)
 
     // 下方手（前臂撑地）
     pThickLine(BODY, Offset(cx - 130, cy + 60), Offset(cx - 145, cy + 95), 18f)
@@ -399,11 +399,11 @@ private fun DrawScope.drawBirdDog(p: Float, pulse: Float, cx: Float, cy: Float) 
     pThickLine(SKIN_DARK, Offset(cx + 180 + ext, cy - 30), Offset(cx + 195 + ext, cy - 50), 12f)
 
     // 主训肌群：腹横肌（核心）
-    pMuscle("腹横肌", Offset(cx - 20, cy + 10), Size(48, 26), MUSCLE, pulse)
+    pMuscle("腹横肌", Offset(cx - 20, cy + 10), Size(48f, 26), MUSCLE, pulse)
     // 副训 1：多裂肌（腰后）
-    pMuscle("多裂肌", Offset(cx + 20, cy + 50), Size(36, 18), MUSCLE_2, pulse)
+    pMuscle("多裂肌", Offset(cx + 20, cy + 50), Size(36f, 18), MUSCLE_2, pulse)
     // 副训 2：臀大肌
-    pMuscle("臀大肌", Offset(cx + 60, cy + 70), Size(34, 20), MUSCLE_2, pulse)
+    pMuscle("臀大肌", Offset(cx + 60, cy + 70), Size(34f, 20), MUSCLE_2, pulse)
 }
 
 // =====================================================
@@ -417,10 +417,10 @@ private fun DrawScope.drawBreathing(p: Float, pulse: Float, cx: Float, cy: Float
 
     // 仰卧身体（侧视）
     pCircle(SKIN, 26f, Offset(cx - 130, cy + 50), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 146, cy + 26), Size(32, 26), 12f)
+    pPath(SKIN_DARK, Offset(cx - 146, cy + 26), Size(32f, 26), 12f)
     // 躯干（呼吸胀缩）
-    pRoundRect(BODY, Offset(cx - 100, cy + 20), Size(180, 50 + breath), 16f)
-    pRoundRect(BODY_LIGHT, Offset(cx - 100, cy + 20), Size(180, 16), 16f)
+    pRoundRect(BODY, Offset(cx - 100, cy + 20), Size(180f, 50 + breath), 16f)
+    pRoundRect(BODY_LIGHT, Offset(cx - 100, cy + 20), Size(180f, 16), 16f)
     // 髋
     pCircle(BODY, 20f, Offset(cx + 80, cy + 50), stroke = SKIN_DARK)
     // 弯腿（90/90）
@@ -433,9 +433,9 @@ private fun DrawScope.drawBreathing(p: Float, pulse: Float, cx: Float, cy: Float
     pCircle(SKIN, 10f, Offset(cx + 30, cy - 20), stroke = SKIN_DARK)
 
     // 主训肌群：膈肌（肋下）
-    pMuscle("膈肌", Offset(cx - 30, cy + 5), Size(60, 22), MUSCLE, pulse)
+    pMuscle("膈肌", Offset(cx - 30, cy + 5), Size(60f, 22), MUSCLE, pulse)
     // 副训：腹横肌
-    pMuscle("腹横肌", Offset(cx + 30, cy + 40), Size(40, 28), MUSCLE_2, pulse)
+    pMuscle("腹横肌", Offset(cx + 30, cy + 40), Size(40f, 28), MUSCLE_2, pulse)
 }
 
 // =====================================================
@@ -452,9 +452,9 @@ private fun DrawScope.drawTke(p: Float, pulse: Float, cx: Float, cy: Float) {
 
     // 头 + 躯干（侧视，右腿）
     pCircle(SKIN, 28f, Offset(cx - 30, cy - 100), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 46, cy - 124), Size(34, 26), 12f)
-    pRoundRect(BODY, Offset(cx - 45, cy - 70), Size(40, 160), 12f)
-    pRoundRect(BODY, Offset(cx - 50, cy + 70), Size(50, 30), 12f)
+    pPath(SKIN_DARK, Offset(cx - 46, cy - 124), Size(34f, 26), 12f)
+    pRoundRect(BODY, Offset(cx - 45, cy - 70), Size(40f, 160), 12f)
+    pRoundRect(BODY, Offset(cx - 50, cy + 70), Size(50f, 30), 12f)
     // 后腿
     pThickLine(BODY, Offset(cx - 25, cy + 100), Offset(cx - 25, cy + 180), 30f)
     pThickLine(SKIN_DARK, Offset(cx - 40, cy + 180), Offset(cx - 5, cy + 180), 18f)
@@ -484,17 +484,17 @@ private fun DrawScope.drawShortFoot(p: Float, pulse: Float, cx: Float, cy: Float
     pLine(GROUND, Offset(20f, cy + 80), Offset(800f, cy + 80), strokeWidth = 3f)
 
     // 小腿（下半截，侧视）
-    pRoundRect(BODY, Offset(cx - 30, cy - 60), Size(60, 100), 16f)
-    pRoundRect(BODY_LIGHT, Offset(cx - 30, cy - 60), Size(60, 20), 16f)
+    pRoundRect(BODY, Offset(cx - 30, cy - 60), Size(60f, 100), 16f)
+    pRoundRect(BODY_LIGHT, Offset(cx - 30, cy - 60), Size(60f, 20), 16f)
     // 脚踝
     pCircle(SKIN, 18f, Offset(cx, cy + 50), stroke = SKIN_DARK)
     // 脚
-    pOval(SKIN, Offset(cx - 80, cy + 50), Size(160, 36), stroke = SKIN_DARK)
+    pOval(SKIN, Offset(cx - 80, cy + 50), Size(160f, 36), stroke = SKIN_DARK)
     // 脚趾
     pCircle(SKIN, 6f, Offset(cx + 80, cy + 60), stroke = SKIN_DARK)
 
     // 主训肌群：足底内在肌（足弓）
-    pArc(MUSCLE, Offset(cx - 50, cy + 30), Size(100, archH), 0f, 180f, strokeWidth = 8f)
+    pArc(MUSCLE, Offset(cx - 50, cy + 30), Size(100f, archH), 0f, 180f, strokeWidth = 8f)
     pLabel("足底内在肌", Offset(cx, cy + 90), MUSCLE, anchor = TextAnchor.CENTER)
 
     // 副训：胫骨后肌（小腿深部）
@@ -519,11 +519,11 @@ private fun DrawScope.drawBridgeCurl(p: Float, pulse: Float, cx: Float, cy: Floa
 
     // 头 + 肩
     pCircle(SKIN, 26f, Offset(cx - 140, cy + 60), stroke = SKIN_DARK)
-    pPath(SKIN_DARK, Offset(cx - 156, cy + 36), Size(34, 26), 13f)
-    pRoundRect(BODY, Offset(cx - 110, cy + 50), Size(40, 30), 10f)
+    pPath(SKIN_DARK, Offset(cx - 156, cy + 36), Size(34f, 26), 13f)
+    pRoundRect(BODY, Offset(cx - 110, cy + 50), Size(40f, 30), 10f)
 
     // 躯干
-    pArc(BODY, Offset(cx - 70, cy - 20 + arch), Size(180, 100), 180f, 180f, strokeWidth = 36f)
+    pArc(BODY, Offset(cx - 70, cy - 20 + arch), Size(180f, 100), 180f, 180f, strokeWidth = 36f)
 
     // 髋
     pCircle(BODY, 22f, Offset(cx + 70, cy + 20 + arch), stroke = SKIN_DARK)
@@ -536,9 +536,9 @@ private fun DrawScope.drawBridgeCurl(p: Float, pulse: Float, cx: Float, cy: Floa
     pCircle(ACCENT, 22f, Offset(ballX, ballY), stroke = SKIN_DARK)
 
     // 主训肌群：腘绳肌（大腿后）
-    pMuscle("腘绳肌", Offset(cx + 90, cy + 30 + arch / 2), Size(40, 20), MUSCLE, pulse)
+    pMuscle("腘绳肌", Offset(cx + 90, cy + 30 + arch / 2), Size(40f, 20), MUSCLE, pulse)
     // 副训：臀大肌
-    pMuscle("臀大肌", Offset(cx + 50, cy + 10 + arch), Size(40, 28), MUSCLE_2, pulse)
+    pMuscle("臀大肌", Offset(cx + 50, cy + 10 + arch), Size(40f, 28), MUSCLE_2, pulse)
 }
 
 // =====================================================
@@ -547,7 +547,7 @@ private fun DrawScope.drawBridgeCurl(p: Float, pulse: Float, cx: Float, cy: Floa
 private fun DrawScope.drawDefault(p: Float, pulse: Float, cx: Float, cy: Float) {
     val sway = sin(p * Math.PI.toFloat()) * 6f
     pCircle(SKIN, 28f, Offset(cx + sway, cy - 80), stroke = SKIN_DARK)
-    pRoundRect(BODY, Offset(cx - 30, cy - 45), Size(60, 110), 16f)
+    pRoundRect(BODY, Offset(cx - 30, cy - 45), Size(60f, 110), 16f)
     pThickLine(SKIN, Offset(cx - 30, cy - 30), Offset(cx - 60 + sway, cy + 30), 18f)
     pThickLine(SKIN, Offset(cx + 30, cy - 30), Offset(cx + 60 - sway, cy + 30), 18f)
     pThickLine(BODY, Offset(cx - 15, cy + 65), Offset(cx - 20, cy + 130), 24f)
